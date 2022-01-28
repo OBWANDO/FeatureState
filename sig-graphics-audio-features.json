@@ -2,49 +2,7 @@
    "Version":"development",
    "SIG":"sig-graphics-audio",
    "Subsystems":{
-      "Render Hardware Interface":{
-         "Sparse Textures":{
-            "Platform": 0,
-            "Description":"Brief note describing what this does",
-            "Content":0,
-            "Functional":0,
-            "Code/API":0,
-            "Performance":0,
-            "Link":"url link to additional information",
-            "Doc":"documentation URL for usage notes"
-         },
-         "DirectX 12":{
-            "Platform": 1,
-            "Description":"DirectX 12 Renderer",
-            "Content":2,
-            "Functional":3,
-            "Code/API":3,
-            "Performance":2,
-            "Link":"https://github.com/o3de/o3de/issues/1847",
-            "Doc":"https://www.o3de.org/docs/atom-guide/features/"
-         },
-         "Vulkan":{
-            "Platform": 1,
-            "Description":"Vulkan Renderer",
-            "Content":1,
-            "Functional":2,
-            "Code/API":2,
-            "Performance":1,
-            "Link":"url link to additional information",
-            "Doc":"https://www.o3de.org/docs/atom-guide/features/"
-         },
-         "Metal":{
-            "Platform": 3,
-            "Description":"Metal renderer",
-            "Content":1,
-            "Functional":2,
-            "Code/API":2,
-            "Performance":1,
-            "Link":"url link to additional information",
-            "Doc":"https://www.o3de.org/docs/atom-guide/features/"
-         }			 
-      },
-	  "Lighting":{
+      "Lighting":{
          "Directional":{
             "Description":"Brief note describing what this does",
             "Content":0,
@@ -54,7 +12,7 @@
             "Link":"url link to additional information",
             "Doc":"documentation URL for usage notes"
          },
-		 "Point":{
+         "Point":{
             "Description":"Brief note describing what this does",
             "Content":0,
             "Functional":0,
@@ -71,9 +29,51 @@
             "Performance":0,
             "Link":"url link to additional information",
             "Doc":"documentation URL for usage notes"
-         }		 
+         }
       },
-	  "Shaders":{
+      "Render Hardware Interface":{
+         "Sparse Textures":{
+            "Platform":0,
+            "Description":"Brief note describing what this does",
+            "Content":0,
+            "Functional":0,
+            "Code/API":0,
+            "Performance":0,
+            "Link":"url link to additional information",
+            "Doc":"documentation URL for usage notes"
+         },
+         "DirectX 12":{
+            "Platform":1,
+            "Description":"DirectX 12 Renderer",
+            "Content":2,
+            "Functional":3,
+            "Code/API":3,
+            "Performance":2,
+            "Link":"https://github.com/o3de/o3de/issues/1847",
+            "Doc":"https://www.o3de.org/docs/atom-guide/features/"
+         },
+         "Vulkan":{
+            "Platform":1,
+            "Description":"Vulkan Renderer",
+            "Content":1,
+            "Functional":2,
+            "Code/API":2,
+            "Performance":1,
+            "Link":"url link to additional information",
+            "Doc":"https://www.o3de.org/docs/atom-guide/features/"
+         },
+         "Metal":{
+            "Platform":3,
+            "Description":"Metal renderer",
+            "Content":1,
+            "Functional":2,
+            "Code/API":2,
+            "Performance":1,
+            "Link":"url link to additional information",
+            "Doc":"https://www.o3de.org/docs/atom-guide/features/"
+         }
+      },
+      "Shaders":{
          "HLSL":{
             "Description":"Brief note describing what this does",
             "Content":0,
@@ -83,7 +83,7 @@
             "Link":"url link to additional information",
             "Doc":"documentation URL for usage notes"
          },
-		 "AZSL":{
+         "AZSL":{
             "Description":"Brief note describing what this does",
             "Content":0,
             "Functional":0,
@@ -99,7 +99,7 @@
             "Performance":0,
             "Link":"url link to additional information",
             "Doc":"documentation URL for usage notes"
-         }		 
-      }	  
+         }
+      }
    }
 }

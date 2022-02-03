@@ -1,6 +1,7 @@
 {
-   "Version":"development",
-   "SIG":"sig-graphics-audio",
+   "BuildVersion":"Development",
+   "BuildVersion":"22.02.1",
+   "SIG":"SIG-Graphics-Audio",
    "Subsystems":{
       "Lighting":{
          "Directional":{

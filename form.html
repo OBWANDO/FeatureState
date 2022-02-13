@@ -1,0 +1,307 @@
+<html>
+<script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+<link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+<link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.themes.css" type="text/css" />
+<link rel="stylesheet" href="http://www.obwando.com/o3de/form.css" type="text/css" />
+    
+<script src="https://jsuites.net/v4/jsuites.js"></script>
+<link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+<script src="https://unpkg.com/github-api/dist/GitHub.bundle.min.js"></script>
+
+<h1 id="signame">SIG: Unspecified</h1>
+<h2>
+    <class id="buildbranch">Branch: Uknown</class>
+    <class id="buildversion">Version: Unknown</class>
+</h2>
+<body>
+<div id="sheetanchor"></div>
+----
+<div id="debuganchor"></div>
+</body>
+
+<script type="module">
+    import { Octokit, App } from "https://cdn.skypack.dev/octokit";
+    window.OctoKit = Octokit
+    window.OctoApp = App
+</script>
+
+<script>
+    var jVersion = "Version-NotSpec";
+    var jSig = "SIG-NotSpecified";
+    var jBranch = "Development";
+    var tbcnt = 0;
+    var anchor = document.getElementById('sheetanchor');
+    var dbganchor = document.getElementById('debuganchor');
+    var tblist = [];
+    
+    const baseurl = "http://www.obwando.com/o3de/"
+
+    //const jsonurl = "https://192.168.0.188/sig-graphics-audio-features.json"
+    //const jsonfile = "sig-graphics-audio-features.json"
+    //const jsonurl = "https://raw.githubusercontent.com/OBWANDO/FeatureState/main/sig-graphics-audio-features.json"
+    const jsonurl = baseurl + "sig-network.json"
+    //const jsonurl = "https://obstressruns.s3.us-east-2.amazonaws.com/sig-graphics-audio-features.json"
+    
+    function parseJson(jsdata) {
+        parseJSHead(jsdata);
+        for (var key in jsdata) {
+            if (key == "Subsystems") {
+                parseJSubSys(jsdata[key])
+            }
+        }
+    }
+
+    function downloadObjectAsJson(exportObj, exportName){
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 3));
+        var downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href",     dataStr);
+        downloadAnchorNode.setAttribute("download", exportName + ".json");
+        document.body.appendChild(downloadAnchorNode); // required for firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+    
+    function addFeatRow(event) {
+        console.log(event.srcElement.id);
+        event.currentTarget.parentElement.jspreadsheet.insertRow()
+    }
+
+    function renameSubsys(event) {
+        var id = parseInt(event.currentTarget.parentElement.id.substring(5))
+        vk = Object.keys(tblist[id])
+        vv = Object.values(tblist[id])
+        renval = prompt("Please enter a new subsystem name", vk);
+        if (renval == vk || renval == null) {
+            return;
+        }
+        delete tblist[id]
+        var rv = {};
+        rv[renval] = vv[0]
+        tblist[id] = rv
+        tagText = document.getElementById('sstag'+vk)
+        tagText.textContent = 'Subsystem: ' + renval + '   '
+    }
+
+    function moveSubsysUp(event) {
+        console.log(event.srcElement.id + 'moveup');
+    }
+
+    function moveSubsysDn(event) {
+        console.log(event.srcElement.id + 'movedn');
+    }
+
+    function parseJSubSys(data) {
+        if (typeof(data) != "object" ) {
+            return;
+        }
+
+        createSheet(data);
+    }
+
+        function createSheet(data) {
+            for (var subsys in data) {
+                var sheetname = 'sheet'+ tbcnt
+                var jsdiv = document.createElement(sheetname);
+                jsdiv.id = sheetname;
+                var h2ent = document.createElement('h2');
+                h2ent.textContent = 'Subsystem: ' + subsys + "   ";
+                h2ent.id = 'sstag' + subsys
+                var renBtn = document.createElement('button');
+                var moveUpBtn = document.createElement('button');
+                var moveDnBtn = document.createElement('button');
+                renBtn.innerHTML = "Rename"
+                renBtn.onclick = function(event) {
+                    renameSubsys(event);
+                }
+                moveUpBtn.innerHTML = "Move Up"
+                moveUpBtn.onclick = function(event) {
+                    moveSubsysUp(event);
+                }
+                moveDnBtn.innerHTML = "Move Down"
+                moveDnBtn.onclick = function(event) {
+                    moveSubsysDn(event);
+                }
+                jsdiv.appendChild(h2ent);
+                var arButton = document.createElement('button');
+                arButton.id = 'btn' + subsys
+                arButton.innerHTML = "Add Row"
+                arButton.onclick = function(event) {
+                    addFeatRow(event);
+                }
+                jsdiv.appendChild(arButton);
+                jsdiv.appendChild(renBtn)
+                jsdiv.appendChild(moveUpBtn)
+                jsdiv.appendChild(moveDnBtn);
+                jsdiv.appendChild(document.createElement("br"));
+
+                document.body.appendChild(jsdiv);
+
+                var jstable = initJspread(sheetname, subsys);
+                var svp = {};
+                svp[subsys] = jstable;
+                tblist.push(svp);
+                tbcnt = tbcnt + 1;
+            
+                if (typeof(data[subsys]) != "object") {
+                    continue;
+                }
+                
+                jstable.tbody = document.createElement('tbody');
+
+                makeTableRow(subsys, data[subsys], jstable)
+            }
+
+    }
+
+    function returnIfProperty(arr, prop) {
+        if (arr.hasOwnProperty(prop)) {
+            return arr[prop];
+        }
+        return ""
+    }
+
+    function addRow(feature, jstable, specs) {
+        jstable.insertRow( [
+            returnIfProperty(specs, 'Module'),    
+            returnIfProperty(specs, 'Feature'),
+            returnIfProperty(specs, 'Content'),
+            returnIfProperty(specs, 'Functional'),
+            returnIfProperty(specs, 'Code/API'),
+            returnIfProperty(specs, 'Performance'), 
+            returnIfProperty(specs, 'Platform'), 
+            returnIfProperty(specs, 'Link'), 
+            returnIfProperty(specs, 'Doc'), 
+            returnIfProperty(specs, 'Description') ]
+        );
+    }
+
+    function makeTableRow(subsys, features, jstable) {
+        for (var feature in features) {
+                var specs = features[feature]
+                addRow(feature, jstable, specs)
+            }
+
+    }
+
+    function parseJSHead(jsdata) {
+        if (jsdata.hasOwnProperty('BuildBranch')) {
+            jBranch = jsdata['BuildBranch'];
+            var sh = document.getElementById('buildbranch');
+            sh.textContent = 'Build Branch: ' + jBranch
+        }
+        if (jsdata.hasOwnProperty('BuildVersion')) {
+            jVersion = jsdata['BuildVersion'];
+            var sh = document.getElementById('buildversion');
+            sh.textContent = 'Build Version: ' + jVersion
+        }
+        if (jsdata.hasOwnProperty('SIG')) {
+            jSig = jsdata['SIG'];
+            var sh = document.getElementById('signame');
+            sh.textContent = 'SIG: ' + jSig
+        }
+        
+    }
+
+    function readWebFile(url) {
+        fetch(url, {method: 'GET', headers: { 'Cache-Control': 'no-cache'} } )
+            .then(response => response.json())
+            .then(resdata => parseJson(resdata))
+            .catch(error => {
+                console.log(error);
+            })
+    }
+    function afterInitSS(obj) {
+        return
+    }
+
+    function initJspread(id, subsys) {
+        var empdata = []
+        var options = {
+            data:empdata,
+            columns: [
+                { type:'text', width:'250', title:'Module', name:'Module', wordWrap:true },    
+                { type:'dropdown', width:'160', title:'Feature', name: 'Feature', url:baseurl + 'featurevals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Content', name: 'Content', url:baseurl + 'statevals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Functional', name: 'Functional', url:baseurl + 'statevals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Code/API', name:'Code/API', title:'Code/API', url:baseurl + 'statevals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Performance', name:'Performance', url: baseurl + 'perfvals.json', autocomplete:true },
+                { type:'dropdown', width:'100', title:'Platform', name:'Platform', url: baseurl + 'platformvals.json', autocomplete:true },
+                { type:'text', width:'150', title:'Link', name:'Link', wordWrap:true },
+                { type:'text', width:'150', title:'Doc Link', name:'Doc', wordWrap:true },
+                { type:'text', width:'400', title:'Description', name:'Description', wordWrap:true },
+            ],
+            rowResize: true,
+            columnDrag: true,
+            defaultColAlign: 'left',
+            onload: function (ele, obj) {
+                afterInitSS(obj);
+            }
+        }
+        return jspreadsheet(document.getElementById(id), options);
+
+    }
+
+    function exportJSon() {
+        var jsExport = {
+            BuildBranch : jBranch,
+            BuildVersion : jVersion,
+            SIG : jSig
+        };
+
+        var jsTable = {}
+        for (var cnt = 0; cnt < tbcnt; cnt++) {
+            var tbk = Object.keys(tblist[cnt]);
+            var tbl = Object.values(tblist[cnt])[0];
+            jsTable[tbk] = tbl.getJson()
+        }
+        jsExport['Subsystems'] = jsTable
+        var jsOut;
+        jsOut = JSON.stringify(jsExport, null, 3 );
+        //document.getElementById("debuganchor").textContent = jsOut;
+        //downloadObjectAsJson(jsExport, jSig+jBranch+jVersion+'.json')
+        return jsOut;
+    }
+
+    function exportToGithub() {
+        uploadToGithub('Anonnie9000','Elektr0qt!', 'main', 'obwando/featurestate', 'sig-test.json', 'Update file' )
+    }
+
+    function createSubsys() {
+        data = {}
+        data['NewSubsystem'] = [{ Module: "New Module" }]
+        createSheet(data);
+    }
+
+    function uploadToGithub(usernm, passwd, repo, branch, filename, commitmsg) {
+        jsonstring = exportJSon()
+        const octokit = window.octokit({ auth: `personal-access-token123` });
+        
+        var github = new GitHub({
+            username: usernm,
+            password: passwd,
+            auth: 'basic'
+        });   
+
+        var repository = github.getRepo( usernm, repo);
+        blobdata = new Blob(jsonstring)
+
+        repository.write(
+            branch, // e.g. 'master'
+            filename, // e.g. 'blog/index.md'
+            blobdata, // e.g. 'Hello world, this is my new content'
+            commitmsg, // e.g. 'Created new index'
+            function(err) {
+                console.log('error happened:' + err);
+            }
+        )
+    }
+
+    readWebFile(jsonurl)
+    
+</script>
+<ol class='example'>
+    <li><a onclick="createSubsys()">Create Subsystem</a></li>
+    <li><a onclick="exportJSon()">Download Json</a></li>
+    <li><a onclick="exportToGithub()">Send to Github</a></li>
+</ol>
+</html>

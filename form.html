@@ -2,7 +2,7 @@
 <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
 <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
 <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.themes.css" type="text/css" />
-<link rel="stylesheet" href="http://www.obwando.com/o3de/form.css" type="text/css" />
+<link rel="stylesheet" href="form.css" type="text/css" />
     
 <script src="https://jsuites.net/v4/jsuites.js"></script>
 <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
@@ -34,13 +34,9 @@
     var dbganchor = document.getElementById('debuganchor');
     var tblist = [];
     
-    const baseurl = "http://www.obwando.com/o3de/"
-
-    //const jsonurl = "https://192.168.0.188/sig-graphics-audio-features.json"
-    //const jsonfile = "sig-graphics-audio-features.json"
+    const jsonfile = "sig-network.json"
     //const jsonurl = "https://raw.githubusercontent.com/OBWANDO/FeatureState/main/sig-graphics-audio-features.json"
-    const jsonurl = baseurl + "sig-network.json"
-    //const jsonurl = "https://obstressruns.s3.us-east-2.amazonaws.com/sig-graphics-audio-features.json"
+    const jsonurl = jsonfile
     
     function parseJson(jsdata) {
         parseJSHead(jsdata);
@@ -220,12 +216,12 @@
             data:empdata,
             columns: [
                 { type:'text', width:'250', title:'Module', name:'Module', wordWrap:true },    
-                { type:'dropdown', width:'160', title:'Feature', name: 'Feature', url:baseurl + 'featurevals.json', autocomplete:true },
-                { type:'dropdown', width:'160', title:'Content', name: 'Content', url:baseurl + 'statevals.json', autocomplete:true },
-                { type:'dropdown', width:'160', title:'Functional', name: 'Functional', url:baseurl + 'statevals.json', autocomplete:true },
-                { type:'dropdown', width:'160', title:'Code/API', name:'Code/API', title:'Code/API', url:baseurl + 'statevals.json', autocomplete:true },
-                { type:'dropdown', width:'160', title:'Performance', name:'Performance', url: baseurl + 'perfvals.json', autocomplete:true },
-                { type:'dropdown', width:'100', title:'Platform', name:'Platform', url: baseurl + 'platformvals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Feature', name: 'Feature', url: 'featurevals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Content', name: 'Content', url: 'statevals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Functional', name: 'Functional', url: 'statevals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Code/API', name:'Code/API', title:'Code/API', url: 'statevals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Performance', name:'Performance', url:  'perfvals.json', autocomplete:true },
+                { type:'dropdown', width:'100', title:'Platform', name:'Platform', url:  'platformvals.json', autocomplete:true },
                 { type:'text', width:'150', title:'Link', name:'Link', wordWrap:true },
                 { type:'text', width:'150', title:'Doc Link', name:'Doc', wordWrap:true },
                 { type:'text', width:'400', title:'Description', name:'Description', wordWrap:true },
@@ -258,7 +254,7 @@
         var jsOut;
         jsOut = JSON.stringify(jsExport, null, 3 );
         //document.getElementById("debuganchor").textContent = jsOut;
-        //downloadObjectAsJson(jsExport, jSig+jBranch+jVersion+'.json')
+        downloadObjectAsJson(jsExport, jSig+jBranch+jVersion+'.json')
         return jsOut;
     }
 

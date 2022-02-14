@@ -4,15 +4,19 @@ body {
 }
 
 a:link {
-	color: #90caf9
+	color: #99e6ff
+}
+
+a:visited {
+	color: #33ccff
 }
 
 :root {
-    --jexcel_header_color: #888;
+    --jexcel_header_color: #999;
     --jexcel_header_color_highlighted: #444;
-    --jexcel_header_background: #313131;
+    --jexcel_header_background: #202020;
     --jexcel_header_background_highlighted: #777;
-    --jexcel_content_color: #ccc;
+    --jexcel_content_color: #888;
     --jexcel_content_color_highlighted: #333;
     --jexcel_content_background: #3e3e3e;
     --jexcel_content_background_highlighted: #333;

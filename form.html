@@ -34,8 +34,7 @@
     var dbganchor = document.getElementById('debuganchor');
     var tblist = [];
     
-    const jsonfile = "sig-network.json"
-    //const jsonurl = "https://raw.githubusercontent.com/OBWANDO/FeatureState/main/sig-graphics-audio-features.json"
+    const jsonfile = "sigjson/sig-network.json"
     const jsonurl = jsonfile
     
     function parseJson(jsdata) {
@@ -216,12 +215,12 @@
             data:empdata,
             columns: [
                 { type:'text', width:'250', title:'Module', name:'Module', wordWrap:true },    
-                { type:'dropdown', width:'160', title:'Feature', name: 'Feature', url: 'featurevals.json', autocomplete:true },
-                { type:'dropdown', width:'160', title:'Content', name: 'Content', url: 'statevals.json', autocomplete:true },
-                { type:'dropdown', width:'160', title:'Functional', name: 'Functional', url: 'statevals.json', autocomplete:true },
-                { type:'dropdown', width:'160', title:'Code/API', name:'Code/API', title:'Code/API', url: 'statevals.json', autocomplete:true },
-                { type:'dropdown', width:'160', title:'Performance', name:'Performance', url:  'perfvals.json', autocomplete:true },
-                { type:'dropdown', width:'100', title:'Platform', name:'Platform', url:  'platformvals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Feature', name: 'Feature', url: 'specjson/featurevals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Content', name: 'Content', url: 'specjson/statevals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Functional', name: 'Functional', url: 'specjson/statevals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Code/API', name:'Code/API', title:'Code/API', url: 'specjson/statevals.json', autocomplete:true },
+                { type:'dropdown', width:'160', title:'Performance', name:'Performance', url:  'specjson/perfvals.json', autocomplete:true },
+                { type:'dropdown', width:'100', title:'Platform', name:'Platform', url:  'specjson/platformvals.json', autocomplete:true },
                 { type:'html', width:'150', title:'Link', name:'Link', wordWrap:true },
                 { type:'html', width:'150', title:'Doc Link', name:'Doc', wordWrap:true },
                 { type:'text', width:'400', title:'Description', name:'Description', wordWrap:true },

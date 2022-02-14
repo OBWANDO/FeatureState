@@ -19,7 +19,7 @@
 </h2>
 
 <body>
-Choose a SIG to edit from GitHub: <select id="sigdrop" onchange="changeSig()"></select>
+Choose a SIG to edit from GitHub: <select id="sigdrop" onchange="changeSig()"></select> or <input id='btnLoadFileJson' type='button' value='Load JSON from File' onclick="loadJsonFromFile()" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <br>
 
 <div id="debuganchor"></div>
@@ -399,6 +399,10 @@ Choose a SIG to edit from GitHub: <select id="sigdrop" onchange="changeSig()"></
         )
     }
 
+    function loadJsonFromFile() {
+        console.log('Load json from a file')
+    }
+
     const loadWebFile = async (url, callback) => {
         let webReq = await fetch(url, {method: 'GET', headers: { 'Cache-Control': 'no-cache'} } )
                             .catch(error => { showError(error); })
@@ -416,10 +420,8 @@ Choose a SIG to edit from GitHub: <select id="sigdrop" onchange="changeSig()"></
     }
 
     loadWebSigs(sigurl)
-    //loadWebJson(jsonurl)
 
     console.log('done')
-    //readWebFile(jsonurl)
     
 </script>
 

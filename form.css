@@ -31,9 +31,10 @@ a:visited {
 }
 
 .jspreadsheet tbody tr:nth-child(even) {
-	background-color: #0E09F1 !important;
+	background-color: #09f190 !important;
 }
 
 .jspreadsheet colgroup col:first-child {
     width: 0 !important;
 }
+

@@ -1,106 +1,133 @@
 {
-   "BuildBranch":"Development",
-   "BuildVersion":"22.02.1",
-   "SIG":"SIG-Graphics-Audio",
-   "Subsystems":{
-      "Lighting":{
-         "Directional":{
-            "Description":"Brief note describing what this does",
-            "Content":0,
-            "Functional":0,
-            "Code/API":0,
-            "Performance":0,
-            "Link":"url link to additional information",
-            "Doc":"documentation URL for usage notes"
+   "BuildBranch": "Development",
+   "BuildVersion": "21.11.2",
+   "SIG": "SIG-Graphics-Audio",
+   "Subsystems": {
+      "Lighting": [
+         {
+            "Module": "Directional",
+            "Feature": "",
+            "Content": "",
+            "Functional": "",
+            "Code/API": "",
+            "Performance": "",
+            "Platform": "0",
+            "Link": "url link to additional information",
+            "Doc": "documentation URL for usage notes",
+            "Description": "Brief note describing what this does"
          },
-         "Point":{
-            "Description":"Brief note describing what this does",
-            "Content":0,
-            "Functional":0,
-            "Code/API":0,
-            "Performance":0,
-            "Link":"url link to additional information",
-            "Doc":"documentation URL for usage notes"
+         {
+            "Module": "Point",
+            "Feature": "",
+            "Content": "",
+            "Functional": "",
+            "Code/API": "",
+            "Performance": "",
+            "Platform": "0",
+            "Link": "url link to additional information",
+            "Doc": "documentation URL for usage notes",
+            "Description": "Brief note describing what this does"
          },
-         "Global Sky":{
-            "Description":"Brief note describing what this does",
-            "Content":0,
-            "Functional":0,
-            "Code/API":0,
-            "Performance":0,
-            "Link":"url link to additional information",
-            "Doc":"documentation URL for usage notes"
+         {
+            "Module": "Global Sky",
+            "Feature": "",
+            "Content": "",
+            "Functional": "",
+            "Code/API": "",
+            "Performance": "",
+            "Platform": "0",
+            "Link": "url link to additional information",
+            "Doc": "documentation URL for usage notes",
+            "Description": "Brief note describing what this does"
          }
-      },
-      "Render Hardware Interface":{
-         "Sparse Textures":{
-            "Platform":0,
-            "Description":"Brief note describing what this does",
-            "Content":0,
-            "Functional":0,
-            "Code/API":0,
-            "Performance":0,
-            "Link":"url link to additional information",
-            "Doc":"documentation URL for usage notes"
+      ],
+      "Render Hardware Interface": [
+         {
+            "Module": "Sparse Textures",
+            "Feature": "",
+            "Content": "",
+            "Functional": "",
+            "Code/API": "",
+            "Performance": "",
+            "Platform": "",
+            "Link": "",
+            "Doc": "<span style=\"color: var(--jexcel_content_color); font-size: 0.875rem; letter-spacing: 0.2px;\">documentation URL for usage notes</span>",
+            "Description": "Brief note describing what this does"
          },
-         "DirectX 12":{
-            "Platform":1,
-            "Description":"DirectX 12 Renderer",
-            "Content":2,
-            "Functional":3,
-            "Code/API":3,
-            "Performance":2,
-            "Link":"https://github.com/o3de/o3de/issues/1847",
-            "Doc":"https://www.o3de.org/docs/atom-guide/features/"
+         {
+            "Module": "DirectX 12",
+            "Feature": "",
+            "Content": "",
+            "Functional": "",
+            "Code/API": "",
+            "Performance": "",
+            "Platform": "",
+            "Link": "<a href=\"https://github.com/o3de/o3de/issues/1847\">Github Issue</a>",
+            "Doc": "<div><a href=\"\\&quot;https://www.o3de.org/docs/atom-guide/features</div\"></a></div><div><div>https://www.o3de.org/docs/atom-guide/features/</div></div>",
+            "Description": "DirectX 12 Renderer"
          },
-         "Vulkan":{
-            "Platform":1,
-            "Description":"Vulkan Renderer",
-            "Content":1,
-            "Functional":2,
-            "Code/API":2,
-            "Performance":1,
-            "Link":"url link to additional information",
-            "Doc":"https://www.o3de.org/docs/atom-guide/features/"
+         {
+            "Module": "Vulkan",
+            "Feature": "",
+            "Content": "",
+            "Functional": "",
+            "Code/API": "",
+            "Performance": "",
+            "Platform": "",
+            "Link": "",
+            "Doc": "<a href=\"https://www.o3de.org/docs/atom-guide/features\">O3DE DOCS</a>",
+            "Description": "Vulkan Renderer"
          },
-         "Metal":{
-            "Platform":3,
-            "Description":"Metal renderer",
-            "Content":1,
-            "Functional":2,
-            "Code/API":2,
-            "Performance":1,
-            "Link":"url link to additional information",
-            "Doc":"https://www.o3de.org/docs/atom-guide/features/"
+         {
+            "Module": "Metal",
+            "Feature": "",
+            "Content": "",
+            "Functional": "",
+            "Code/API": "",
+            "Performance": "",
+            "Platform": "",
+            "Link": "",
+            "Doc": "<a href=\"https://www.o3de.org/docs/atom-guide/features\">O3DE DOCS</a>",
+            "Description": "Metal renderer"
          }
-      },
-      "Shaders":{
-         "HLSL":{
-            "Description":"Brief note describing what this does",
-            "Content":0,
-            "Functional":0,
-            "Code/API":0,
-            "Performance":0,
-            "Link":"url link to additional information",
-            "Doc":"documentation URL for usage notes"
+      ],
+      "Shaders": [
+         {
+            "Module": "HLSL",
+            "Feature": "",
+            "Content": "",
+            "Functional": "",
+            "Code/API": "",
+            "Performance": "",
+            "Platform": "0",
+            "Link": "url link to additional information",
+            "Doc": "documentation URL for usage notes",
+            "Description": "Brief note describing what this does"
          },
-         "AZSL":{
-            "Description":"Brief note describing what this does",
-            "Content":0,
-            "Functional":0,
-            "Code/API":0,
-            "Performance":0,
-            "Link":"url link to additional information",
-            "Doc":"documentation URL for usage notes"
+         {
+            "Module": "AZSL",
+            "Feature": "",
+            "Content": "",
+            "Functional": "",
+            "Code/API": "",
+            "Performance": "",
+            "Platform": "0",
+            "Link": "url link to additional information",
+            "Doc": "documentation URL for usage notes",
+            "Description": "Brief note describing what this does"
          },
-         "OLDZSL":{
-            "Content":0,
-            "Functional":0,
-            "Code/API":0,
-            "Performance":0,
-            "Link":"url link to additional information",
-            "Doc":"documentation URL for usage notes"
+         {
+            "Module": "OLDZSL",
+            "Feature": "",
+            "Content": "",
+            "Functional": "",
+            "Code/API": "",
+            "Performance": "",
+            "Platform": "0",
+            "Link": "url link to additional information",
+            "Doc": "documentation URL for usage notes",
+            "Description": "0"
          }
-      }
+      ]
    }
 }

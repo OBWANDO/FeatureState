@@ -2,41 +2,135 @@
 <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
 <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
 <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.themes.css" type="text/css" />
-<link rel="stylesheet" href="form.css" type="text/css" />
-    
+   
 <script src="https://jsuites.net/v4/jsuites.js"></script>
 <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
-<script src="https://unpkg.com/github-api/dist/GitHub.bundle.min.js"></script>
 
-<h1 id="signame">SIG: Unspecified</h1>
-<h2>
-    <class id="buildbranch">Branch: Uknown</class>
+<link rel="stylesheet" href="form.css" type="text/css" />
+
+<h1><class id="signame">SIG: Unspecified</class> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <class id="buildbranch">Branch: Uknown</class>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <class id="buildversion">Version: Unknown</class>
+</h1>
+<h2>
+    <input id='btnMakeSubsys' type='button' value='Create Subsystem' onclick="createSubsys()" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input id='btnDownJson' type='button' value='Download JSON' onclick="exportJSon()" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input id='btnSendGithub' type='button' value='Send to Github' onclick="exportToGithub()" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </h2>
+
 <body>
-<div id="sheetanchor"></div>
+Choose a SIG to edit from GitHub: <select id="sigdrop" onchange="changeSig()"></select>
+<br>
 ----
 <div id="debuganchor"></div>
+<div id="reloadModal">
+    <center>
+        <p style="font-size: 22px;">
+        You are requesting to load a new sig<br><br><B><u>If you confirm, your current work will be lost.</u></b><br><br>
+        Click the <u>Download</u> button to receive a copy as a JSON file<br>
+        Click the <u>Confirm Reload</u> button to clear and load the new sig.<br><br>
+        Click anywhere else or close this dialog and cancel.<BR>
+        <BR><BR>
+        <input type='button' value='Download' onclick="exportJSon()" class='plain'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        <input type='button' value='Confirm Reload' onclick="confirmNewLoad()" class='plain'>
+        </p>
+    </center>
+</div>
 </body>
 
 <script type="module">
-    import { Octokit, App } from "https://cdn.skypack.dev/octokit";
-    window.OctoKit = Octokit
-    window.OctoApp = App
+    //<script src="https://unpkg.com/github-api/dist/GitHub.bundle.min.js">
+    //import { Octokit, App } from "https://cdn.skypack.dev/octokit";
+    //window.OctoKit = Octokit
+    //window.OctoApp = App
 </script>
 
 <script>
     var jVersion = "Version-NotSpec";
     var jSig = "SIG-NotSpecified";
     var jBranch = "Development";
-    var tbcnt = 0;
     var anchor = document.getElementById('sheetanchor');
     var dbganchor = document.getElementById('debuganchor');
     var tblist = [];
+    var tbcnt = 0;
+    var sigLoaded = false;
+    var modCancel = true;
+    var prevSig;
+
+    var reloadModal = jSuites.modal(document.getElementById('reloadModal'), {
+        width: '600px',
+        height: '480px',
+        closed: true,
+        onclose: function() {
+            allowNewLoad()
+        }
+    });
+
+    const sigurl = "sigjson/sig-list.json"
     
-    const jsonfile = "sigjson/sig-network.json"
-    const jsonurl = jsonfile
-    
+    function confirmNewLoad() {
+        modCancel = false;
+        reloadModal.close();
+    }
+
+    function allowNewLoad() {
+        console.log('asking to load new')
+        if (modCancel == false) {
+            sigLoaded = false
+            clearSheets()
+            changeSig()
+        }
+        
+        document.getElementById('sigdrop').selectedIndex = prevSig
+        modCancel = true;
+    }
+
+    function clearSheets() {
+        tbcnt --;
+        for (; tbcnt > -1; tbcnt--) {
+            var tbl = Object.values(tblist[tbcnt])[0]
+            tbl.destroy();
+            tblist.pop()
+            document.getElementById('sheet'+ tbcnt).remove()
+        }
+        tbcnt = 0;
+    }
+
+    function enableButtons() {
+        document.getElementById('btnMakeSubsys').disabled = false
+        document.getElementById('btnDownJson').disabled = false
+        //document.getElementById('btnSendGithub').disabled = false
+    }
+
+    function changeSig() {
+        var droplist = document.getElementById('sigdrop');  
+        var dropPick = droplist.options[droplist.selectedIndex].value;
+        if (dropPick == "") { return; }
+        if (sigLoaded == true) {
+            reloadModal.open();
+            return;
+        }
+        console.log('loading: '+dropPick)
+        loadWebJson(dropPick);
+        sigLoaded = true;
+        prevSig = droplist.selectedIndex
+        enableButtons()
+    }
+
+    function loadSigDrop(jsonData) {
+        dropEle = document.getElementById('sigdrop')
+        iter = 0 ;
+        for (var cnt = 0; cnt < jsonData.length; cnt++) {
+            docOpt = document.createElement('option')
+            docOpt.index = iter
+            docOpt.text = jsonData[cnt]['name']
+            docOpt.value = jsonData[cnt]['url']
+            dropEle.appendChild(docOpt)
+            iter++;
+        }
+    }
+
     function parseJson(jsdata) {
         parseJSHead(jsdata);
         for (var key in jsdata) {
@@ -197,14 +291,21 @@
         
     }
 
+    function showError(err) {
+        var sh = document.getElementById('signame');
+        sh.textContent = 'ERROR: ' + err
+        console.log(err)
+    }
+
     function readWebFile(url) {
         fetch(url, {method: 'GET', headers: { 'Cache-Control': 'no-cache'} } )
             .then(response => response.json())
             .then(resdata => parseJson(resdata))
             .catch(error => {
-                console.log(error);
+                showError(error);
             })
     }
+    
     function afterInitSS(obj) {
         return
     }
@@ -291,12 +392,28 @@
         )
     }
 
-    readWebFile(jsonurl)
+    const loadWebFile = async (url, callback) => {
+        let webReq = await fetch(url, {method: 'GET', headers: { 'Cache-Control': 'no-cache'} } )
+                            .catch(error => { showError(error); })
+        let webJson = await webReq.json()
+        return webJson
+    }
+
+    const loadWebSigs = async(url) => {
+        let jsonData = await loadWebFile(url)
+        loadSigDrop(jsonData)
+    }
+    const loadWebJson = async(url) => {
+        let jsonData = await loadWebFile(url)
+        parseJson(jsonData)
+    }
+
+    loadWebSigs(sigurl)
+    //loadWebJson(jsonurl)
+
+    console.log('done')
+    //readWebFile(jsonurl)
     
 </script>
-<ol class='example'>
-    <li><a onclick="createSubsys()">Create Subsystem</a></li>
-    <li><a onclick="exportJSon()">Download Json</a></li>
-    <li><a onclick="exportToGithub()">Send to Github</a></li>
-</ol>
+
 </html>

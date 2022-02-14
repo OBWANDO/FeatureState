@@ -21,7 +21,7 @@
 <body>
 Choose a SIG to edit from GitHub: <select id="sigdrop" onchange="changeSig()"></select>
 <br>
-----
+
 <div id="debuganchor"></div>
 <div id="reloadModal">
     <center>
@@ -53,7 +53,6 @@ Choose a SIG to edit from GitHub: <select id="sigdrop" onchange="changeSig()"></
     var anchor = document.getElementById('sheetanchor');
     var dbganchor = document.getElementById('debuganchor');
     var tblist = [];
-    var tbcnt = 0;
     var sigLoaded = false;
     var modCancel = true;
     var prevSig;
@@ -87,14 +86,13 @@ Choose a SIG to edit from GitHub: <select id="sigdrop" onchange="changeSig()"></
     }
 
     function clearSheets() {
-        tbcnt --;
+        tbcnt = tblist.length-1;
         for (; tbcnt > -1; tbcnt--) {
             var tbl = Object.values(tblist[tbcnt])[0]
             tbl.destroy();
             tblist.pop()
             document.getElementById('sheet'+ tbcnt).remove()
         }
-        tbcnt = 0;
     }
 
     function enableButtons() {
@@ -179,6 +177,14 @@ Choose a SIG to edit from GitHub: <select id="sigdrop" onchange="changeSig()"></
         console.log(event.srcElement.id + 'movedn');
     }
 
+    function delSubsys(event) {
+        console.log(event.srcElement.id + 'delsubsys');
+        var id = parseInt(event.currentTarget.parentElement.id.substring(5))
+        tblist.splice(id,1)
+        document.getElementById('sheet'+ id).remove()
+        event.currentTarget.parentElement.jspreadsheet.destroy()
+    }
+
     function parseJSubSys(data) {
         if (typeof(data) != "object" ) {
             return;
@@ -187,59 +193,60 @@ Choose a SIG to edit from GitHub: <select id="sigdrop" onchange="changeSig()"></
         createSheet(data);
     }
 
-        function createSheet(data) {
-            for (var subsys in data) {
-                var sheetname = 'sheet'+ tbcnt
-                var jsdiv = document.createElement(sheetname);
-                jsdiv.id = sheetname;
-                var h2ent = document.createElement('h2');
-                h2ent.textContent = 'Subsystem: ' + subsys + "   ";
-                h2ent.id = 'sstag' + subsys
-                var renBtn = document.createElement('button');
-                var moveUpBtn = document.createElement('button');
-                var moveDnBtn = document.createElement('button');
-                renBtn.innerHTML = "Rename"
-                renBtn.onclick = function(event) {
-                    renameSubsys(event);
-                }
-                moveUpBtn.innerHTML = "Move Up"
-                moveUpBtn.onclick = function(event) {
-                    moveSubsysUp(event);
-                }
-                moveDnBtn.innerHTML = "Move Down"
-                moveDnBtn.onclick = function(event) {
-                    moveSubsysDn(event);
-                }
-                jsdiv.appendChild(h2ent);
-                var arButton = document.createElement('button');
-                arButton.id = 'btn' + subsys
-                arButton.innerHTML = "Add Row"
-                arButton.onclick = function(event) {
-                    addFeatRow(event);
-                }
-                jsdiv.appendChild(arButton);
-                jsdiv.appendChild(renBtn)
-                jsdiv.appendChild(moveUpBtn)
-                jsdiv.appendChild(moveDnBtn);
-                jsdiv.appendChild(document.createElement("br"));
+    function makeButton(btnName, btnFunc) {
+        var ret = document.createElement('button');
+        ret.innerHTML = btnName
+        ret.onclick = function(event) {
+            btnFunc(event);
+        }
+        return ret;
+    }
 
-                document.body.appendChild(jsdiv);
-
-                var jstable = initJspread(sheetname, subsys);
-                var svp = {};
-                svp[subsys] = jstable;
-                tblist.push(svp);
-                tbcnt = tbcnt + 1;
+    function createSheet(data) {
+        for (var subsys in data) {
+            var sheetname = 'sheet'+ tblist.length
+            var jsdiv = document.createElement(sheetname);
+            jsdiv.id = sheetname;
             
-                if (typeof(data[subsys]) != "object") {
-                    continue;
-                }
-                
-                jstable.tbody = document.createElement('tbody');
+            var hrule = document.createElement('hr');
+            jsdiv.appendChild(hrule);
 
-                makeTableRow(subsys, data[subsys], jstable)
+            var h2ent = document.createElement('h2');
+            h2ent.textContent = 'Subsystem: ' + subsys + "   ";
+            h2ent.id = 'sstag' + subsys
+            
+            var renBtn = makeButton("Rename", renameSubsys)
+            var moveUpBtn = makeButton("Move Up", moveSubsysUp)
+            var moveDnBtn = makeButton("Move Down", moveSubsysDn)
+            var delSubsysBtn = makeButton("Delete Subsystem", delSubsys)
+            var arButton = makeButton("Add Row", addFeatRow)
+            
+            arButton.id = 'btn' + subsys
+            delSubsysBtn.disabled = true
+            
+            jsdiv.appendChild(h2ent);
+            jsdiv.appendChild(arButton);
+            jsdiv.appendChild(renBtn)
+            jsdiv.appendChild(moveUpBtn)
+            jsdiv.appendChild(moveDnBtn);
+            jsdiv.appendChild(delSubsysBtn)
+            jsdiv.appendChild(document.createElement("br"));
+
+            document.body.appendChild(jsdiv);
+
+            var jstable = initJspread(sheetname, subsys);
+            var svp = {};
+            svp[subsys] = jstable;
+            tblist.push(svp);
+        
+            if (typeof(data[subsys]) != "object") {
+                continue;
             }
+            
+            jstable.tbody = document.createElement('tbody');
 
+            makeTableRow(subsys, data[subsys], jstable)
+        }
     }
 
     function returnIfProperty(arr, prop) {
@@ -345,7 +352,7 @@ Choose a SIG to edit from GitHub: <select id="sigdrop" onchange="changeSig()"></
         };
 
         var jsTable = {}
-        for (var cnt = 0; cnt < tbcnt; cnt++) {
+        for (var cnt = 0; cnt < tblist.length; cnt++) {
             var tbk = Object.keys(tblist[cnt]);
             var tbl = Object.values(tblist[cnt])[0];
             jsTable[tbk] = tbl.getJson()
@@ -354,12 +361,12 @@ Choose a SIG to edit from GitHub: <select id="sigdrop" onchange="changeSig()"></
         var jsOut;
         jsOut = JSON.stringify(jsExport, null, 3 );
         //document.getElementById("debuganchor").textContent = jsOut;
-        downloadObjectAsJson(jsExport, jSig+jBranch+jVersion+'.json')
+        downloadObjectAsJson(jsExport, jSig+'-'+jBranch+'-'+jVersion)
         return jsOut;
     }
 
     function exportToGithub() {
-        uploadToGithub('Anonnie9000','Elektr0qt!', 'main', 'obwando/featurestate', 'sig-test.json', 'Update file' )
+        uploadToGithub('','keepguessing-glhf', 'main', 'obwando/featurestate', 'sig-test.json', 'Update file' )
     }
 
     function createSubsys() {

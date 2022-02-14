@@ -11,6 +11,21 @@ a:visited {
 	color: #33ccff
 }
 
+.jmodal {
+  background-color: #303030;
+}
+
+.jmodal:before {
+  background-color: #303030;
+}
+
+.jmodal_backdrop {
+  background-color: #303030;
+}
+
+hr {
+  border: 2px solid;
+}
 :root {
     --jexcel_header_color: #999;
     --jexcel_header_color_highlighted: #444;
@@ -31,7 +46,7 @@ a:visited {
 }
 
 .jspreadsheet tbody tr:nth-child(even) {
-	background-color: #09f190 !important;
+	background-color: #0E09F1 !important;
 }
 
 .jspreadsheet colgroup col:first-child {
